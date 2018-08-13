@@ -1,0 +1,19 @@
+language: node_js
+services:
+- mongodb
+node_js:
+- '8'
+before_deploy:
+- yarn run build
+- npm version $TRAVIS_TAG --allow-same-version=true --git-tag-version=false
+deploy:
+  provider: npm
+  email: contact@louisbodart.fr
+  api_key:
+    secure: O4+HP3aoXKifQ3ULAglO8OjPI40y+CpC1WsxFxF/ErTEG6LqSB0NlpTXfZJre71lFDCCmL2rzKyv56u1dJQwZ/lKATkuR0V32CW18r32kADJTGBypq2GDUFKTU/xUZffq0ma5y6fBghsCLg49X7+rxW2sDPZwrRIPq9ilcYVbGaLRgBmpipvLh3etjhWQyCLy6qq/Zd92hpIHsYigOxG0Y82GI9h62Qv+Pj1LakMMKeEgcnlxJrLVSFukMeGRsLEiLcNu9pk68dUF6yxmwVS94Toos0X9U44WfiMcyvpmAlt+EgDj4HgrB0buLPweHjpCA9Qmhq/Mnk+W9DNdzZ7iBJvGC915xKLflHeGFEeKhtNrvTmArRktw2a+sU57J3qZ8Gou2HFwF0zOsq6cO4vs/FTLAdBfwBTOu2Hf/AMb3P/f8dnYALs4Zp6bYy48xUsancQW/48cX9wfDI/hba3/7NoUOPDrFMO/NNHST8ZWMfscM5eymRboL9bxh5L0YH3a1ihp6J74jhyI8QUSall6Jp9sIgETwusLJF52JT/Fzq+/azQO5qCAQwOqPMCNYFN4WrpcocCkGsoOcbJgfi/VTfLFgPHm9nuoZ6V3cpnGi9ODufAM2cikA8ISa/SbAV0oawyCTAr7eCcQvxmeS/gYfalTKK5A7Kl22CCE19S1P0=
+  on:
+    branch: master
+    tags: true
+    repo: codeinbrain/honey-pager
+  skip_cleanup: true
+  verbose: true
