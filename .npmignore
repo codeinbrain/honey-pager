@@ -3,3 +3,4 @@ test
 lib
 .babelrc
 yarn-error.log
+index.js

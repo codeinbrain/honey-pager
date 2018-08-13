@@ -2,7 +2,7 @@
   "name": "honey-pager",
   "version": "0.0.0",
   "description": "A Relay-style cursor pagination tool for mongoose schema.",
-  "main": "index.js",
+  "main": "build/index.js",
   "engines": {
     "node": ">=8.0.0"
   },
