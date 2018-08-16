@@ -5,11 +5,11 @@ import SortOrderEnum from './SortOrderEnumQL';
 const registeredInputs = {};
 
 export default (type, sortables) => {
-	if (registeredInputs[type]) return registeredInputs[type];
+  if (registeredInputs[type]) return registeredInputs[type];
 
-	const newType = new GraphQLInputObjectType({
-  	name: `${type}SortInput`,
-  	fields: {
+  const newType = new GraphQLInputObjectType({
+    name: `${type}SortInput`,
+    fields: {
       by: {
         type: new GraphQLNonNull(SortFieldsEnum(type, sortables))
       },
@@ -17,9 +17,9 @@ export default (type, sortables) => {
         type: SortOrderEnum,
         defaultValue: 'asc'
       }
-  	}
+    }
   });
 
-	registeredInputs[type] = newType;
-	return newType;
-}
+  registeredInputs[type] = newType;
+  return newType;
+};
