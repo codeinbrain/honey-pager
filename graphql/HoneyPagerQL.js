@@ -1,6 +1,5 @@
 import { GraphQLInt, GraphQLString } from 'graphql';
 import PageType from './PageTypeQL';
-import PageCursor from './PageCursorScalarQL';
 import SortInput from './SortInputQL';
 
 export default (config) => {
@@ -10,8 +9,8 @@ export default (config) => {
 		...{
 			first: { type: GraphQLInt },
 			last: { type: GraphQLInt },
-			after: { type: PageCursor },
-			before: { type: PageCursor },
+			after: { type: GraphQLString },
+			before: { type: GraphQLString },
 			search: { type: GraphQLString },
 		}
 	}

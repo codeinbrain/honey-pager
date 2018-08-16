@@ -35,6 +35,13 @@ test('Testing vanilla', async () => {
   expect(last(v.edges).node.lastName === fixtures[fixtures.length - 1].lastName);
 });
 
+test('Testing first and last (should throw)', async () => {
+  await expect(User.paginateResult({}, {
+    first: 5,
+    last: 5
+  })).rejects.toThrow('first and last cannot be set at the same time.');
+});
+
 test('Testing first', async () => {
   const v = await User.paginateResult({}, {
     first: 3
@@ -167,6 +174,18 @@ test('Testing last/before with last > max', async () => {
   expect(v.pageInfo.hasPreviousPage).toBe(false);
   expect(first(v.edges).node.lastName === fixtures[0].lastName);
   expect(last(v.edges).node.lastName === fixtures[fixtures.length - 2].lastName);
+});
+
+test('Testing wrong cursors', async () => {
+  const v = await User.paginateResult({}, {});
+  const wrongAfterCursor = `${v.pageInfo.startCursor}toto`;
+  const wrongBeforeCursor = `${v.pageInfo.endCursor}tata`;
+  await expect(User.paginateResult({}, {
+    after: wrongAfterCursor
+  })).rejects.toThrow('Invalid cursor');
+  await expect(User.paginateResult({}, {
+    before: wrongBeforeCursor
+  })).rejects.toThrow('Invalid cursor');
 });
 
 test('Testing first/before with first < max', async () => {
