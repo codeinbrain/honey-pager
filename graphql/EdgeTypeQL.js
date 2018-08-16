@@ -1,8 +1,11 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
-import PageCursor from './PageCursorScalarQL';
+
+const registeredEdges = {};
 
 export default (type) => {
-	return new GraphQLObjectType({
+	if (registeredEdges[type]) return registeredEdges[type];
+
+	const newType = new GraphQLObjectType({
 		name: type + 'Edge',
 		description: "Generic edge to allow cursors",
 		fields: () => ({
@@ -10,8 +13,11 @@ export default (type) => {
 				type: type
 			},
 			cursor: {
-				type: PageCursor
+				type: GraphQLString
 			}
 		})
 	});
+
+	registeredEdges[type] = newType;
+	return newType;
 }
