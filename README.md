@@ -4,9 +4,7 @@
 
 A [Relay-style](https://facebook.github.io/relay/graphql/connections.htm) cursor pagination tool for [mongoose](https://github.com/Automattic/mongoose) schema. Designed to work with GraphQL.
 
-:warning: _Module and doc are currently under development._
-
-## Usage
+## Quick view
 
 ```javascript
 // User.js
@@ -59,3 +57,5 @@ This will gives you the following response:
   }
 }
 ```
+
+Made with :heart: by [lobodart](https://github.com/lobodart).
