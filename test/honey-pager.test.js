@@ -25,6 +25,12 @@ afterAll(async () => {
   await database.disconnect();
 });
 
+test('Testing config persistence', async () => {
+  expect(require('..').config.get()).toEqual({ cursorSecret: 'shhhhh' });
+  require('..').config.update({ cursorSecret: 'mySecret' });
+  expect(require('..').config.get()).toEqual({ cursorSecret: 'mySecret' });
+});
+
 test('Testing vanilla', async () => {
   const v = await User.paginateResult();
   expect(v.totalCount).toBe(fixtures.length);
