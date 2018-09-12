@@ -1,3 +1,4 @@
+import './myconfig';
 import database from './database';
 import User from './User';
 import first from 'lodash/first';
@@ -26,9 +27,13 @@ afterAll(async () => {
 });
 
 test('Testing config persistence', async () => {
-  expect(require('..').config.get()).toEqual({ cursorSecret: 'shhhhh' });
-  require('..').config.update({ cursorSecret: 'mySecret' });
-  expect(require('..').config.get()).toEqual({ cursorSecret: 'mySecret' });
+  expect(require('..').config.get().cursorSecret).toBe('mySecret');
+  expect(() => {
+    require('..').config.update({
+      cursorSecret: 'aNewSecret',
+      methodName: 'aNewMethodName'
+    })
+  }).toThrow('HoneyPager config cannot be updated after it has been got.');
 });
 
 test('Testing vanilla', async () => {
