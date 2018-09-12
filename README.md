@@ -58,5 +58,4 @@ This will gives you the following response:
 }
 ```
 
-## Author
-[Louis Bodart](https://github.com/lobodart)
+Made with :heart: by [lobodart](https://github.com/lobodart).
