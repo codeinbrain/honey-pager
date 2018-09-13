@@ -132,7 +132,7 @@ These are the arguments used to paginate the result. They usually are coming fro
 * `before` - If you want all the results before a specific cursor
 * `first` - Get the first **n** results
 * `last` - Get the last **n** results
-* `search` - A string to look for among the `searchables` (see options below)
+* `search` - A string to look for among the `searchFields` (see options below)
 * `sort` - An object that contains the field and the way to sort the results
 
   ```
@@ -141,7 +141,7 @@ These are the arguments used to paginate the result. They usually are coming fro
 
 ### Options
 Options are here to customize the way you paginate your results. Here are the different options:
-* `searchables` - An array of schema field names on which you allow searching
+* `searchFields` - An array of schema field names on which you allow searching
 * `sortables` - An array of schema field names on which you allow sorting
 
 ## With GraphQL
