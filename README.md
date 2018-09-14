@@ -1,7 +1,11 @@
-<img src="https://github.com/codeinbrain/honey-pager/blob/master/docs/honeypager.png" width="700" title="HoneyPager">
+<p align="center">
+  <img src="https://github.com/codeinbrain/honey-pager/blob/master/docs/honeypager.png" width="700" title="HoneyPager">
+</p>
 
-![Travis (.org)](https://img.shields.io/travis/codeinbrain/honey-pager.svg?style=flat-square)
-![Status](https://img.shields.io/badge/status-experimental-orange.svg?style=flat-square)
+<p align="center">
+  <a href="https://travis-ci.org/codeinbrain/honey-pager"><img src="https://img.shields.io/travis/codeinbrain/honey-pager.svg" title="Travis (.org)"></a>
+  <img src="https://img.shields.io/badge/status-experimental-orange.svg" title="Status">
+</p>
 
 A [Relay-style](https://facebook.github.io/relay/graphql/connections.htm) cursor pagination tool for [mongoose](https://github.com/Automattic/mongoose) schema. Designed to work with GraphQL.
 
