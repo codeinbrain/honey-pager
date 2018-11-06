@@ -9,6 +9,12 @@ const schema = mongoose.Schema({
   },
   lastName: {
     type: String
+  },
+  isAdmin: {
+    type: Boolean
+  },
+  age: {
+    type: Number
   }
 }, {
   versionKey: false,
