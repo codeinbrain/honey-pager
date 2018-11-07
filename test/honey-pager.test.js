@@ -5,12 +5,12 @@ import first from 'lodash/first';
 import last from 'lodash/last';
 
 const fixtures = [
-  { firstName: 'John', lastName: 'Doe' },
-  { firstName: 'Alana', lastName: 'Doe' },
-  { firstName: 'Jane', lastName: 'Doe' },
-  { firstName: 'Rosamond', lastName: 'Tanner' },
-  { firstName: 'Foo', lastName: 'Bar' },
-  { firstName: 'Anona', lastName: 'Ivor' },
+  { firstName: 'John', lastName: 'Doe', isAdmin: true, age: 31 },
+  { firstName: 'Alana', lastName: 'Doe', isAdmin: false, age: 22 },
+  { firstName: 'Jane', lastName: 'Doe', isAdmin: false, age: 28 },
+  { firstName: 'Rosamond', lastName: 'Tanner', isAdmin: true, age: 25 },
+  { firstName: 'Foo', lastName: 'Bar', isAdmin: false, age: 12 },
+  { firstName: 'Anona', lastName: 'Ivor', isAdmin: true, age: 17 }
 ];
 
 beforeAll(async () => {
@@ -687,4 +687,105 @@ test('Testing sort desc using before', async () => {
 
   const result = v.edges.map((v) => v.node.lastName);
   expect(JSON.stringify(result)).toBe(JSON.stringify(source));
+});
+
+// FILTERS
+test('Testing simple filter', async () => {
+  const s = await User.paginateResult({}, {
+    filters: {
+      isAdmin: true
+    }
+  }, {
+    filterFields: {
+      isAdmin: true
+    }
+  });
+
+  const adminCount = fixtures.filter((v) => v.isAdmin).length;
+  expect(s.totalCount).toBe(adminCount);
+});
+
+test('Testing custom filter', async () => {
+  const s = await User.paginateResult({}, {
+    filters: {
+      isAdult: true
+    }
+  }, {
+    filterFields: {
+      isAdult: (value) => {
+        return { age: { [value ? '$gte' : '$lt']: 21 } };
+      }
+    }
+  });
+
+  const adultCount = fixtures.filter((v) => v.age >= 21).length;
+  expect(s.totalCount).toBe(adultCount);
+});
+
+test('Testing filters combination', async () => {
+  const s = await User.paginateResult({}, {
+    filters: {
+      isAdmin: true,
+      isAdult: true
+    }
+  }, {
+    filterFields: {
+      isAdmin: true,
+      isAdult: (value) => {
+        return { age: { [value ? '$gte' : '$lt']: 21 } };
+      }
+    }
+  });
+
+  const mixedCount = fixtures.filter((v) => v.age >= 21 && v.isAdmin).length;
+  expect(s.totalCount).toBe(mixedCount);
+});
+
+test('Testing unknown filter', async () => {
+  const s = await User.paginateResult({}, {
+    filters: {
+      age: 22
+    }
+  });
+
+  expect(s.totalCount).toBe(fixtures.length);
+});
+
+test('Testing with cursor only (filter only on first query)', async () => {
+  const fixtureFilter = (user) => user.age >= 21 && user.isAdmin;
+  const s = await User.paginateResult({}, {
+    first: 1,
+    filters: {
+      isAdmin: true,
+      isAdult: true
+    }
+  }, {
+    filterFields: {
+      isAdmin: true,
+      isAdult: (value) => {
+        return { age: { [value ? '$gte' : '$lt']: 21 } };
+      }
+    }
+  });
+
+  expect(s.totalCount).toBe(fixtures.filter(fixtureFilter).length);
+  expect(s.edges[0].node.firstName).toBe(fixtures.filter(fixtureFilter)[0].firstName);
+
+  const v = await User.paginateResult({}, {
+    first: 2,
+    after: s.pageInfo.startCursor
+  }, {
+    filterFields: {
+      isAdmin: true,
+      isAdult: (value) => {
+        return { age: { [value ? '$gte' : '$lt']: 21 } };
+      }
+    }
+  });
+
+  expect(v.edges[0].node.firstName).toBe(fixtures.filter(fixtureFilter)[1].firstName);
+  expect(s.totalCount).toBe(fixtures.filter(fixtureFilter).length);
+  expect(v.edges.length).toBe(1);
+  expect(v.pageInfo.hasNextPage).toBe(false);
+  expect(v.pageInfo.hasPreviousPage).toBe(true);
 });

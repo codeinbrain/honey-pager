@@ -135,14 +135,64 @@ These are the arguments used to paginate the result. They usually are coming fro
 * `search` - A string to look for among the `searchFields` (see options below)
 * `sort` - An object that contains the field and the way to sort the results
 
-  ```
+  ```javascript
   { sort: { by: "firstName", order: "desc" } }
+  ```
+* `filters` - An object that contains filters if needed.
+You can give any number of filters you want as long as their keys are in the `filterFields` (see options below)
+
+  ```javascript
+  {
+    filters: {
+      isAdmin: true,
+      isAdult: true
+      ...
+    }
+  }
   ```
 
 ### Options
 Options are here to customize the way you paginate your results. Here are the different options:
 * `searchFields` - An array of schema field names on which you allow searching
 * `sortables` - An array of schema field names on which you allow sorting
+* `filterFields` - An object that contains whitelisted filters and how to deal with them
+  * If you give a `boolean` value, it means that this field is allowed (or not if `false`) as a filter.
+  It will result in a basic comparison. Let's consider the example below:
+  ```javascript
+  {
+      filterFields: {
+        isAdmin: true,
+        age: true,
+        parent: false
+        ...
+      }
+  }
+  ```
+  In this case, HoneyPager will accept two filters: `isAdmin` and `age`. `parent` and others will be ignored.
+  So, if the client sends the filters defined below, Mongo will search for _"users that are admin **AND** aged of **EXACTLY** 42"_.
+  ```javascript
+  {
+      filters: {
+        isAdmin: true,
+        age: 42,
+        parent: "user-id"
+        ...
+      }
+  }
+  ```
+
+  * Now, if you give a `function`, you will be able to create your own comparison(s).
+  For the example, let's say that our model doesn't have an `isAdult` field but just the user `age`.
+  ```javascript
+  {
+      // The value is the one coming from the input
+      isAdult: (value) => {
+        // Return value MUST BE a Mongo "rule"
+        return { age: { [value ? '$gte' : '$lt']: 21 } };
+      }
+  }
+  ```
+  With this resolver, HoneyPager will know how to deal with the `isAdult` filter.
 
 ## With GraphQL
 This part will be written soon :smile:
