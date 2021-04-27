@@ -40,6 +40,6 @@
     "graphql": "^0.13.2",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.10",
-    "validator": "^10.5.0"
+    "validator": "^13.6.0"
   }
 }
